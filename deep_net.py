@@ -55,11 +55,6 @@ with tf.Session() as sess:
         print(i, 'accuracy:', (np.round(sess.run(predict_op, feed_dict={X: tvX,
                                 p_keep_input: 1.0, p_keep_hidden: 1.0})) == tvY).mean())
 
-
-        # print(i, np.mean(np.argmax(teY, axis=1) ==
-                        #  sess.run(predict_op, feed_dict={X: teX, Y: teY,
-                                                        #  p_keep_input: 1.0,
-                                                        #  p_keep_hidden: 1.0})))
     print('Final score:', (np.round(sess.run(predict_op, feed_dict={X: teX,
                                         p_keep_input: 1.0,
                                         p_keep_hidden: 1.0})) == teY).mean())
