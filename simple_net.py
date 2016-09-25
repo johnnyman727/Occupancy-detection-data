@@ -5,8 +5,8 @@ import numpy as np
 import input_data
 import matplotlib.pyplot as plt
 
-def init_weights(shape, dev):
-    return tf.Variable(tf.random_normal(shape, stddev=dev))
+def init_weights(shape):
+    return tf.Variable(tf.random_normal(shape, stddev=0.01))
 
 
 def model(X, w_h, w_o):
@@ -21,8 +21,8 @@ teX, teY = data.test.features, data.test.labels;
 X = tf.placeholder("float32", [None, 5])
 Y = tf.placeholder("float32", [None, 1])
 
-w_h = init_weights([5, 5], np.sqrt(2 / np.prod(X.get_shape().as_list()[1:]))) # create symbolic variables
-w_o = init_weights([5, 1], np.sqrt(2 / np.prod(Y.get_shape().as_list()[1:])))
+w_h = init_weights([5, 100]) # create symbolic variables
+w_o = init_weights([100, 1])
 
 py_x = model(X, w_h, w_o)
 
