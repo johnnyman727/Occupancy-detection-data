@@ -3,10 +3,9 @@
 import tensorflow as tf
 import numpy as np
 import input_data
-import matplotlib.pyplot as plt
 
-def init_weights(shape):
-    return tf.Variable(tf.random_normal(shape, stddev=0.01))
+def init_weights(shape, dev):
+    return tf.Variable(tf.random_normal(shape, stddev=dev))
 
 
 def model(X, w_h, w_o):
@@ -21,8 +20,8 @@ teX, teY = data.test.features, data.test.labels;
 X = tf.placeholder("float32", [None, 5])
 Y = tf.placeholder("float32", [None, 1])
 
-w_h = init_weights([5, 100]) # create symbolic variables
-w_o = init_weights([100, 1])
+w_h = init_weights([5, 100], np.sqrt(2 / np.prod(X.get_shape().as_list()[1:]))) # create symbolic variables
+w_o = init_weights([100, 1], np.sqrt(2 / np.prod(Y.get_shape().as_list()[1:])))
 
 py_x = model(X, w_h, w_o)
 
@@ -43,15 +42,8 @@ with tf.Session() as sess:
             sess.run(train_op, feed_dict={X: trX[start:end], Y: trY[start:end]});
 
         cost_history.append(sess.run(cost, feed_dict={X: tvX, Y:tvY}));
-        print(i, 'cost', cost_history[len(cost_history) - 1]);
-        accuracy_history.append((np.round(sess.run(predict_op, feed_dict={X: tvX})) == tvY).mean())
-        print(i, 'acc', accuracy_history[len(accuracy_history)-1])
+        print(i, 'cost:', sess.run(cost, feed_dict={X: tvX, Y:tvY}));
+        print(i, 'accuracy:', (np.round(sess.run(predict_op, feed_dict={X: tvX})) == tvY).mean())
 
 
     print('Final score:', (np.round(sess.run(predict_op, feed_dict={X: teX})) == teY).mean())
-
-plt.plot(cost_history, 'r--');
-plt.text(120, .35, r'Cost')
-plt.plot(accuracy_history, 'b--');
-plt.text(120, .80, r'Accuracy')
-plt.show();

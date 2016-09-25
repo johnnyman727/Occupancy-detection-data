@@ -22,9 +22,9 @@ def model(X, w_h, w_h2, w_o, p_keep_input, p_keep_hidden): # this network is the
 
 
 data = input_data.read_data_sets("datasets/");
-trX, trY = data.train['features'], data.train['labels'];
-tvX, tvY = data.validate['features'], data.validate['labels'];
-teX, teY = data.test['features'], data.test['labels'];
+trX, trY = data.train.features, data.train.labels;
+tvX, tvY = data.validate.features, data.validate.labels;
+teX, teY = data.test.features, data.test.labels;
 
 X = tf.placeholder("float32", [None, 5])
 Y = tf.placeholder("float32", [None, 2])
@@ -39,7 +39,7 @@ py_x = model(X, w_h, w_h2, w_o, p_keep_input, p_keep_hidden)
 #
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(py_x, Y))
 train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(cost)
-predict_op = tf.argmax(py_x, 1)
+predict_op = tf.nn.sigmoid(py_x)
 
 # Launch the graph in a session
 with tf.Session() as sess:
